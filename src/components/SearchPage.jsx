@@ -39,7 +39,7 @@ export default function SearchPage() {
             <div id="results">
              {movies.map((movie) => (
                 <Card
-                    key={movie.id}
+                    key={movie.id} movie={movie}
                     title={movie.title}
                     originalTitle={movie.original_title}
                     language={movie.original_language}
