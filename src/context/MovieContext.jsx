@@ -15,6 +15,18 @@ export default function MovieProvider({ children }) {
     //stato errori
     const [error, setError] = useState(null)
 
+    // Funzione per normalizzare i dati
+    const normalizeMediaData = (mediaArray) => {
+        return mediaArray.map((item) => ({
+            id: item.id,
+            title: item.title || item.name, // titolo per film e serie
+            originalTitle: item.original_title || item.orginal_name,
+            language: item.original_language,
+            rating: item.vote_average,
+        }))
+    }
+
+    // Funzione per cercare i film  
     const searchMovies = async (searchQuery) => {
         if (!searchQuery) return;
       
@@ -24,15 +36,18 @@ export default function MovieProvider({ children }) {
         try {
           const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchQuery}&api_key=a4e56daa6e97ba82389a3f2b7838eac4`);
           const data = await response.json();
+
+
       
           if (data.results) {
-            setMovie(data.results);
-            console.log("Film salvati nello stato:", data.results); // Log dei dati salvati
+            const normalizedData = normalizeMediaData(data.results)
+            setMovie(normalizedData);
+            console.log("Film normalizzati e salvati nello stato:", normalizedData); // Log dei dati salvati
           } else {
             setError("No movies found.");
           }
         } catch (err) {
-          console.error("Errore nella chiamata API:", err.message);
+          console.error("Errore nella chiamata API:", err.message); 
           setError("Failed to fetch movies.");
         } finally {
           setIsLoading(false);
