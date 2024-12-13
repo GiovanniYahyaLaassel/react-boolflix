@@ -1,9 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './layouts/Navbar'
 import DefaultLayout from './layouts/DefaultLayout'
-import SearchPage from './pages/SearchPage'
-import Home from './pages/Home'
-import About from './pages/About'
+import SearchPage from './components/SearchPage'
+import Main from './components/main'
 
 
 

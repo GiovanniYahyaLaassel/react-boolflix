@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
 import { MovieContext } from "../context/MovieContext"
+import Card from "../components/Card"
 
 
 export default function SearchPage() {
@@ -36,25 +37,19 @@ export default function SearchPage() {
 
             {/* area risultati */}
             <div id="results">
-                
-                {movies.map((movie) => (
-                <div key={movie.id} className="card my-2">
-                    <div className="card-body">
-                        <h5 className="card-title">{movie.title}</h5>
-                        <h6 className="card-subtitle mb-2 text-muted">
-                        {movie.original_title}
-                        </h6>
-                        <p className="card-text">
-                            <strong>Language:</strong> {movie.original_language}
-                        </p>
-                        <p className="card-text">
-                            <strong>Rating:</strong> {movie.vote_average}
-                        </p>
-                    </div>
-                </div>
-      ))}
+             {movies.map((movie) => (
+                <Card
+                    key={movie.id}
+                    title={movie.title}
+                    originalTitle={movie.original_title}
+                    language={movie.original_language}
+                    rating={movie.vote_average}
+                />
+                ))}
+             
             </div>    
-    
         </div>
     )
 }
+     
+     
