@@ -16,19 +16,20 @@ export default function MovieProvider({ children }) {
     const [error, setError] = useState(null)
 
     // Funzione per normalizzare i dati
-    const normalizeMediaData = (mediaArray) => {
+    const normalizeMediaData = (mediaArray, type) => {
       const normalized = mediaArray.map((item) => ({
           id: item.id,
-          title: item.title || item.name,
-          originalTitle: item.original_title || item.original_name,
+          title: item.title || item.name, //title per film , name per le serie
+          originalTitle: item.original_title || item.original_name,  
           original_language: item.original_language,
           rating: item.vote_average,
+          type: type
       }));
       console.log("Dati normalizzati:", normalized);
       return normalized;
   };
 
-    // Funzione per cercare i film  
+    // Funzione per cercare i film  e serire tv
     const searchMovies = async (searchQuery) => {
         if (!searchQuery) return; 
       
@@ -36,19 +37,29 @@ export default function MovieProvider({ children }) {
         setError(null);
       
         try {
-          const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchQuery}&api_key=a4e56daa6e97ba82389a3f2b7838eac4`);
-          const data = await response.json();
-          console.log('Dati ricevuti dall\'API:', data);
+          // Chiamata API per i film
+          const movieResponse = await fetch(
+          `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&api_key=a4e56daa6e97ba82389a3f2b7838eac4&language=it_IT`);
+          const movieData = await movieResponse.json();
 
+          
+          // Chiamata API per le serie TV
+          const tvResponse = await fetch(
+          `https://api.themoviedb.org/3/search/tv?query=${searchQuery}&api_key=a4e56daa6e97ba82389a3f2b7838eac4&language=it_IT`);
+          const tvData = await tvResponse.json();
 
-      
-          if (data.results) {
-            const normalizedData = normalizeMediaData(data.results)
-            setMovie(normalizedData);
-            console.log("Film normalizzati e salvati nello stato:", normalizedData); // Log dei dati salvati
-          } else {
-            setError("No movies found.");
-          }
+          // Normalizzo i dati di entrambi
+          const normalizedMovies = normalizeMediaData(movieData.results || [], "movie");
+          const normalizedTVShows = normalizeMediaData(tvData.results || [], "tv");
+
+          // Unisco i risultati
+            setMovie([...normalizedMovies, ...normalizedTVShows]);
+
+            console.log("Media normalizzati e salvati nello stato:", [
+              ...normalizedMovies,
+              ...normalizedTVShows,
+            ]);
+            
         } catch (err) {
           console.error("Errore nella chiamata API:", err.message); 
           setError("Failed to fetch movies.");
