@@ -15,6 +15,9 @@ export default function MovieProvider({ children }) {
     //stato errori
     const [error, setError] = useState(null)
 
+    const imageBaseUrl = "https://image.tmdb.org/t/p/";
+    const imageSize = 'w342';
+
     // Funzione per normalizzare i dati
     const normalizeMediaData = (mediaArray, type) => {
       const normalized = mediaArray.map((item) => ({
@@ -23,7 +26,8 @@ export default function MovieProvider({ children }) {
           originalTitle: item.original_title || item.original_name,  
           original_language: item.original_language,
           rating: item.vote_average,
-          type: type
+          type: type,
+          poster: item.poster_path ? `${imageBaseUrl}${imageSize}${item.poster_path}`: null, //genero l'url completo
       }));
       console.log("Dati normalizzati:", normalized);
       return normalized;
