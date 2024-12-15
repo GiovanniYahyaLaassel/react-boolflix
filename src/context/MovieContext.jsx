@@ -17,18 +17,20 @@ export default function MovieProvider({ children }) {
 
     // Funzione per normalizzare i dati
     const normalizeMediaData = (mediaArray) => {
-        return mediaArray.map((item) => ({
-            id: item.id,
-            title: item.title || item.name, // titolo per film e serie
-            originalTitle: item.original_title || item.orginal_name,
-            language: item.original_language,
-            rating: item.vote_average,
-        }))
-    }
+      const normalized = mediaArray.map((item) => ({
+          id: item.id,
+          title: item.title || item.name,
+          originalTitle: item.original_title || item.original_name,
+          original_language: item.original_language,
+          rating: item.vote_average,
+      }));
+      console.log("Dati normalizzati:", normalized);
+      return normalized;
+  };
 
     // Funzione per cercare i film  
     const searchMovies = async (searchQuery) => {
-        if (!searchQuery) return;
+        if (!searchQuery) return; 
       
         setIsLoading(true);
         setError(null);
@@ -36,6 +38,7 @@ export default function MovieProvider({ children }) {
         try {
           const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchQuery}&api_key=a4e56daa6e97ba82389a3f2b7838eac4`);
           const data = await response.json();
+          console.log('Dati ricevuti dall\'API:', data);
 
 
       
