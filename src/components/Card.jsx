@@ -1,5 +1,6 @@
 import React from "react"
 import { getFlagUrl } from "../flags/flagMapper";
+import styles from "./Card.module.css"; 
 
 export default function Card ({ movie }) {
   console.log("Dati ricevuti nel componente Card:", movie);
@@ -15,6 +16,7 @@ export default function Card ({ movie }) {
                 <img
                  src={getFlagUrl(movie.original_language)}
                  alt={`${movie.original_language} flag`}
+                 className={styles.flag} 
                 />
 
             </p>

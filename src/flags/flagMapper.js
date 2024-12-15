@@ -1,10 +1,19 @@
 export function getFlagUrl(languageCode) {
-    const supportedCodes = ['en', 'it', 'fr', 'es', 'de', 'ja', 'zh']; // Elenco da FlagCDN per i codici
-    const fallbackFlag = 'https://flagcdn.com/w320/xx.png'; // Bandiere
+    const codeMapping = {
+        en: 'us', 
+        it: 'it', 
+        fr: 'fr', 
+        es: 'es', 
+        de: 'de', 
+    };
 
-    if (supportedCodes.includes(languageCode)) {
-        return `https://flagcdn.com/w320/${languageCode}.png`; // URL bandiera basata sul codice
+    const fallbackFlag = 'https://flagcdn.com/w320/xx.png'; 
+
+    const countryCode = codeMapping[languageCode]; // Mappa il codice della lingua a un codice paese
+
+    if (countryCode) {
+        return `https://flagcdn.com/w320/${countryCode}.png`; // URL bandiera basata sul codice
     }
 
-    return fallbackFlag;
+    return fallbackFlag; // Se non trovo, restituisce il fallback
 }
